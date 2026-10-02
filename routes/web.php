@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\UsersController;
-use App\Http\Controllers\UserPermissionsController;
-use App\Http\Controllers\RolesController;
-use App\Http\Controllers\MasterMenusController;
 use App\Http\Controllers\DepartmentsController;
+use App\Http\Controllers\MasterMenusController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\UserPermissionsController;
+use App\Http\Controllers\UserRolesController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,6 +18,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('user-roles/assignment-options', [UserRolesController::class, 'getAssignmentOptions'])->name('user-roles.assignment-options');
+    Route::resource('user-roles', UserRolesController::class)->only(['index', 'store', 'edit']);
     Route::resource('users', UsersController::class);
     Route::get('user-permissions/assignment-options', [UserPermissionsController::class, 'getAssignmentOptions'])->name('user-permissions.assignment-options');
     Route::resource('user-permissions', UserPermissionsController::class);
@@ -31,4 +34,4 @@ Route::middleware('auth')->group(function () {
     Route::resource('departments', DepartmentsController::class);
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

@@ -36,7 +36,6 @@ class PermissionSeeder extends Seeder
             ['id' => 22, 'name' => 'user-roles.view',        'guard_name' => 'web'],
             ['id' => 23, 'name' => 'user-roles.add',         'guard_name' => 'web'],
             ['id' => 24, 'name' => 'user-roles.update',      'guard_name' => 'web'],
-            ['id' => 25, 'name' => 'user-roles.delete',      'guard_name' => 'web'],
             ['id' => 26, 'name' => 'system.login',    'guard_name' => 'web'],
         ];
 

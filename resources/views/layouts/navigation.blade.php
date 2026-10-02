@@ -76,11 +76,19 @@
                             </a>
                         </li>
                         @endcan
-                        @can('roles.view')
+                        @can('user-permissions.view')
                         <li>
                             <a class="dropdown-item d-flex align-items-center {{ request()->routeIs('user-permissions.*') ? 'active' : '' }}"
                                 href="{{ route('user-permissions.index') }}">
                                 <i class="bi bi-people me-2"></i> User Permissions
+                            </a>
+                        </li>
+                        @endcan
+                        @can('user-roles.view')
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center {{ request()->routeIs('user-roles.*') ? 'active' : '' }}"
+                                href="{{ route('user-roles.index') }}">
+                                <i class="bi bi-people me-2"></i> User Roles
                             </a>
                         </li>
                         @endcan

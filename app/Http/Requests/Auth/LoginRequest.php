@@ -34,7 +34,7 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    public function authenticate(): void
+    public function authenticate(): bool
     {
         $this->ensureIsNotRateLimited();
 
@@ -56,8 +56,20 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        Auth::login($user, $this->boolean('remember'));
         RateLimiter::clear($this->throttleKey());
+
+        if ($user->hasEnabledTwoFactorAuthentication()) {
+            $this->session()->put([
+                'login.id' => $user->getKey(),
+                'login.remember' => $this->boolean('remember'),
+            ]);
+
+            return true;
+        }
+
+        Auth::login($user, $this->boolean('remember'));
+
+        return false;
     }
 
     public function ensureIsNotRateLimited(): void

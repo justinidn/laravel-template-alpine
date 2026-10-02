@@ -19,6 +19,10 @@
             </div>
 
             <div class="col-12">
+                @include('profile.partials.two-factor-authentication-form')
+            </div>
+
+            <div class="col-12">
                 @include('profile.partials.delete-user-form')
             </div>
         </div>

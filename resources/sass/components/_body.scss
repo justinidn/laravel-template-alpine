@@ -1,8 +1,10 @@
 body {
-    font-family: 'Segoe UI', sans-serif !important;
+    // Tambahkan fallback font setelah 'Segoe UI'
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', Arial, sans-serif !important;
     font-size: 0.875rem;
 }
-// Tambahkan di file SCSS Anda jika diperlukan
+
+// Styling breadcrumb
 .breadcrumb {
     background-color: transparent;
     padding: 0;

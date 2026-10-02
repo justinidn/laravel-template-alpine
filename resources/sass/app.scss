@@ -1,7 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap');
+@use 'components/navbar';
+@use 'components/body';
 
-@import 'components/navbar';
-@import 'components/body';
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 @import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';

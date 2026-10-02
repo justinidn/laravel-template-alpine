@@ -29,7 +29,15 @@
                                     <!-- Header Menu & Select All Switch -->
                                     <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
                                         <label class="form-label fw-bold text-dark fs-7 text-uppercase mb-0" x-text="menu.display_name + ' PERMISSIONS'"></label>
-                                        <x-toggle-switch name="perm_all" label="Select All" idExpression="'perm_all_' + menu.id" bindModel="false" wrapperClass="form-check form-switch d-flex align-items-center gap-2 ps-0 m-0" labelClass="form-check-label fw-semibold text-primary small" class="ms-0" x-bind:checked="isAllSelected(menu)" @change="toggleSelectAll(menu, $event.target.checked)" />
+                                        <div class="form-check form-switch d-flex align-items-center gap-2 ps-0 m-0">
+                                            <input class="form-check-input ms-0"
+                                                type="checkbox"
+                                                :id="'perm_all_' + menu.id"
+                                                :checked="isAllSelected(menu)"
+                                                @change="toggleSelectAll(menu, $event.target.checked)">
+                                            <label class="form-check-label fw-semibold text-primary small"
+                                                :for="'perm_all_' + menu.id">Select All</label>
+                                        </div>
                                     </div>
 
                                     <!-- Permissions Grid 2 Kolom (Sesuai Desain Master Menu) -->
@@ -39,7 +47,16 @@
                                                 <label class="form-label fw-semibold mb-1 text-capitalize"
                                                     :for="'perm_' + menu.id + '_' + item.action"
                                                     x-text="item.action + ' Permission'"></label>
-                                                <x-toggle-switch name="permission" label="" model="form.permissions[item.full_name]" idExpression="'perm_' + menu.id + '_' + item.action" labelExpression="form.permissions[item.full_name] ? 'On' : 'Off'" wrapperClass="form-check form-switch d-flex align-items-center gap-2 ps-0" labelClass="form-check-label small text-muted" class="ms-0" />
+                                                <div class="form-check form-switch d-flex align-items-center gap-2 ps-0">
+                                                    <input class="form-check-input ms-0"
+                                                        type="checkbox"
+                                                        :id="'perm_' + menu.id + '_' + item.action"
+                                                        :checked="Boolean(form.permissions[item.full_name])"
+                                                        @change="togglePermission(menu, item, $event.target.checked)">
+                                                    <label class="form-check-label small text-muted"
+                                                        :for="'perm_' + menu.id + '_' + item.action"
+                                                        x-text="form.permissions[item.full_name] ? 'On' : 'Off'"></label>
+                                                </div>
                                             </div>
                                         </template>
                                     </div>
@@ -72,6 +89,7 @@
             errors: {},
             bsModal: null,
             masterMenus: [],
+            selectAllByMenu: {},
             form: {
                 id: '',
                 name: '',
@@ -114,6 +132,7 @@
                     } else {
                         this.isEdit = false;
                         this.form = this.defaultForm();
+                        this.syncSelectAllStates();
                     }
 
                     this.bsModal.show();
@@ -133,6 +152,8 @@
                     name: data.name ?? '',
                     permissions: assignedPermissions
                 };
+
+                this.syncSelectAllStates();
             },
 
             async fetchMasterMenus() {
@@ -145,6 +166,8 @@
             },
 
             toggleSelectAll(menu, checked) {
+                this.selectAllByMenu[menu.id] = checked;
+
                 if (menu.available_actions) {
                     menu.available_actions.forEach(item => {
                         this.form.permissions[item.full_name] = checked;
@@ -152,9 +175,25 @@
                 }
             },
 
+            togglePermission(menu, item, checked) {
+                this.form.permissions[item.full_name] = checked;
+                this.selectAllByMenu[menu.id] = this.areAllPermissionsSelected(menu);
+            },
+
+            syncSelectAllStates() {
+                this.selectAllByMenu = {};
+                this.masterMenus.forEach(menu => {
+                    this.selectAllByMenu[menu.id] = this.areAllPermissionsSelected(menu);
+                });
+            },
+
+            areAllPermissionsSelected(menu) {
+                return Boolean(menu.available_actions?.length) &&
+                    menu.available_actions.every(item => Boolean(this.form.permissions[item.full_name]));
+            },
+
             isAllSelected(menu) {
-                if (!menu.available_actions || menu.available_actions.length === 0) return false;
-                return menu.available_actions.every(item => Boolean(this.form.permissions[item.full_name]));
+                return Boolean(this.selectAllByMenu[menu.id]);
             },
 
             submitForm() {
