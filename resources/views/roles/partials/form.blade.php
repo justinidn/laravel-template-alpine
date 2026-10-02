@@ -121,7 +121,7 @@
                         if (data.permissions && Array.isArray(data.permissions)) {
                             this.populateForm(data);
                         } else {
-                            axios.get(`/roles/${data.id}`)
+                            axios.get(`roles/${data.id}`)
                                 .then(res => {
                                     this.populateForm(res.data.data);
                                 })

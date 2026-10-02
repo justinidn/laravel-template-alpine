@@ -162,7 +162,7 @@
                 },
 
                 editItem(id) {
-                    axios.get(`/user-permissions/${id}/edit`)
+                    axios.get(`user-permissions/${id}/edit`)
                         .then(res => {
                             window.dispatchEvent(new CustomEvent('open-user-permissions-modal', {
                                 detail: res.data.data
@@ -174,7 +174,7 @@
                 deleteItem(id) {
                     if (!confirm('Are you sure you want to delete this record?')) return;
 
-                    axios.delete(`/user-permissions/${id}`, {
+                    axios.delete(`user-permissions/${id}`, {
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
                             }

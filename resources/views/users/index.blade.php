@@ -242,7 +242,7 @@
                 },
 
                 editItem(id) {
-                    axios.get(`/users/${id}/edit`)
+                    axios.get(`users/${id}/edit`)
                         .then(res => {
                             window.dispatchEvent(new CustomEvent('open-users-modal', {
                                 detail: res.data.data
@@ -254,7 +254,7 @@
                 deleteItem(id) {
                     if (!confirm('Are you sure you want to delete this record?')) return;
 
-                    axios.delete(`/users/${id}`, {
+                    axios.delete(`users/${id}`, {
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
                             }

@@ -225,7 +225,7 @@
                 },
 
                 editItem(id) {
-                    axios.get(`/departments/${id}/edit`)
+                    axios.get(`departments/${id}/edit`)
                         .then(res => {
                             window.dispatchEvent(new CustomEvent('open-departments-modal', {
                                 detail: res.data.data
@@ -237,7 +237,7 @@
                 deleteItem(id) {
                     if (!confirm('Are you sure you want to delete this record?')) return;
 
-                    axios.delete(`/departments/${id}`, {
+                    axios.delete(`departments/${id}`, {
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
                             }

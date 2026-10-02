@@ -167,7 +167,7 @@
                 },
 
                 editItem(id) {
-                    axios.get(`/roles/${id}/edit`)
+                    axios.get(`roles/${id}/edit`)
                         .then(res => {
                             window.dispatchEvent(new CustomEvent('open-roles-modal', {
                                 detail: res.data.data
@@ -179,7 +179,7 @@
                 deleteItem(id) {
                     if (!confirm('Are you sure you want to delete this record?')) return;
 
-                    axios.delete(`/roles/${id}`, {
+                    axios.delete(`roles/${id}`, {
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
                             }
