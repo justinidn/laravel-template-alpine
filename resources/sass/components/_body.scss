@@ -1,0 +1,30 @@
+body {
+    font-family: 'Segoe UI', sans-serif !important;
+    font-size: 0.875rem;
+}
+// Tambahkan di file SCSS Anda jika diperlukan
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 0;
+    font-size: 0.875rem;
+
+    .breadcrumb-item {
+        + .breadcrumb-item::before {
+            color: #6c757d;
+        }
+
+        a {
+            color: #005a9e;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        &.active {
+            color: #6c757d;
+        }
+    }
+}

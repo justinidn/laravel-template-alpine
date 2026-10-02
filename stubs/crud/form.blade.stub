@@ -1,0 +1,107 @@
+<div class="modal fade"
+    id="{{ modalId }}"
+    tabindex="-1"
+    aria-labelledby="{{ modalId }}Label"
+    aria-hidden="true"
+    data-bs-backdrop="static" 
+    data-bs-keyboard="false"
+    x-data="{{ modalAlpineComponent }}">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0">
+            <form @submit.prevent="submitForm">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold" id="{{ modalId }}Label" x-text="isEdit ? 'Edit {{ title }}' : 'Add {{ title }}'"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body p-4">
+                    <input type="hidden" x-model="form.id">
+
+                    <!-- FIELD FORM DENGAN KOMPONEN -->
+                    <x-input-field name="name" label="Name" placeholder="Enter name..." required />
+
+                    {{-- Hapus komentar di bawah jika menggunakan kolom status --}}
+                    {{-- <x-toggle-switch name="is_active" label="Active Status" showIf="isEdit" /> --}}
+                </div>
+
+                <div class="modal-footer bg-light">
+                    <div class="row w-100 g-2 m-0">
+                        <div class="col-6 ps-0">
+                            <x-save-button class="w-100" />
+                        </div>
+                        <div class="col-6 pe-0">
+                            <button type="button" class="btn btn-outline-secondary w-100 btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('{{ modalAlpineComponent }}', () => ({
+            isEdit: false,
+            errors: {},
+            bsModal: null,
+            form: {
+                id: '',
+                name: '',
+                // is_active: true
+            },
+
+            defaultForm() {
+                return {
+                    id: '',
+                    name: '',
+                    // is_active: true
+                };
+            },
+
+            init() {
+                this.bsModal = new bootstrap.Modal(document.getElementById('{{ modalId }}'), {
+                    animation: false
+                });
+
+                window.addEventListener('open-{{ viewFolder }}-modal', (e) => {
+                    this.errors = {};
+                    const data = e.detail;
+
+                    if (data && data.id) {
+                        this.isEdit = true;
+                        this.form = {
+                            ...data,
+                            // is_active: Boolean(data.is_active)
+                        };
+                    } else {
+                        this.isEdit = false;
+                        this.form = this.defaultForm();
+                    }
+
+                    this.bsModal.show();
+                });
+            },
+
+            submitForm() {
+                this.errors = {};
+
+                axios.post("{{ route('{{ viewFolder }}.store') }}", this.form)
+                    .then(() => {
+                        this.bsModal.hide();
+                        window.dispatchEvent(new CustomEvent('{{ viewFolder }}-table-reload'));
+                        alert('Data successfully saved!');
+                    })
+                    .catch(err => {
+                        if (err.response?.status === 422) {
+                            this.errors = err.response.data.errors;
+                        } else {
+                            alert('System error occurred. Please try again.');
+                        }
+                    });
+            }
+        }));
+    });
+</script>
+@endpush

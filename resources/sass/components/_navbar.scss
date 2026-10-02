@@ -1,0 +1,96 @@
+.navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+
+    .navbar-brand,
+    .nav-link {
+        color: #333333;
+        transition: all 0.15s ease-in-out;
+        border-radius: 4px;
+        padding-left: 0.6rem;
+        padding-right: 0.6rem;
+        position: relative;
+
+        &:hover,
+        &:focus {
+            color: #000000;
+            background-color: #f0f0f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        &.active {
+            color: #333333 !important;
+            background-color: #f0f0f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+            font-weight: 600;
+
+            &::before {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 4px;
+                right: 4px;
+                height: 3px;
+                background-color: #1b68f8;
+                border-radius: 2px 2px 0 0;
+            }
+        }
+    }
+
+    .navbar-toggler-icon {
+        filter: none;
+    }
+
+    .dropdown-menu {
+        background-color: #ffffff;
+        border: 1px solid #cccccc;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        border-radius: 6px;
+        padding: 4px;
+
+        .dropdown-item {
+            color: #333333;
+            border-radius: 4px;
+            padding: 6px 12px;
+            position: relative;
+
+            &:hover,
+            &:focus {
+                background-color: #f0f0f0;
+                color: #000000;
+            }
+
+            &.active {
+                background-color: #e5e5e5;
+                color: #333333 !important;
+                font-weight: 600;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    bottom: 2px;
+                    left: 8px;
+                    width: 12px;
+                    height: 3px;
+                    background-color: #1b68f8;
+                    border-radius: 2px;
+                }
+            }
+
+            &.text-danger {
+                color: #dc3545 !important;
+
+                &:hover,
+                &:focus {
+                    background-color: rgba(220, 53, 69, 0.1);
+                    color: #dc3545 !important;
+                }
+            }
+        }
+
+        .dropdown-divider {
+            border-color: #e5e5e5;
+            margin: 4px 0;
+        }
+    }
+}

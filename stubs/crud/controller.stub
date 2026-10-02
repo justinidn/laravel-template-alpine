@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\{{ request }};
+use App\Models\{{ model }};
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\DataTables;
+
+class {{ class }} extends Controller
+{
+    public function index(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = {{ model }}::query();
+
+            if ($request->filled('search')) {
+                $search = $request->string('search')->trim()->toString();
+
+                $query->where(function ($query) use ($search) {
+                    // $query->where('name', 'like', "%{$search}%");
+                });
+            }
+
+            // Un-comment jika menggunakan kolom is_active
+            // $query->where('is_active', ! $request->boolean('inactive'));
+
+            return DataTables::of($query)->make(true);
+        }
+
+        return view('{{ viewFolder }}.index');
+    }
+
+    public function store({{ request }} $request)
+    {
+        ${{ modelVariable }} = {{ model }}::findOrNew($request->input('id'));
+        ${{ modelVariable }}->fill($request->validated());
+        
+        // Un-comment jika menggunakan kolom is_active
+        // ${{ modelVariable }}->is_active = $request->boolean('is_active');
+
+        ${{ modelVariable }}->exists
+            ? ${{ modelVariable }}->updated_by = Auth::id()
+            : ${{ modelVariable }}->created_by = Auth::id();
+
+        ${{ modelVariable }}->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => ${{ modelVariable }}->wasRecentlyCreated
+                ? 'Data berhasil ditambahkan.'
+                : 'Data berhasil diperbarui.',
+            'data' => ${{ modelVariable }},
+        ]);
+    }
+
+    public function edit({{ model }} ${{ modelVariable }})
+    {
+        return response()->json([
+            'status' => 'success',
+            'data' => ${{ modelVariable }},
+        ]);
+    }
+
+    public function destroy({{ model }} ${{ modelVariable }})
+    {
+        ${{ modelVariable }}->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data berhasil dihapus.',
+        ]);
+    }
+}
