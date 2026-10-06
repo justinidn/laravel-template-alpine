@@ -112,7 +112,8 @@
                     window.deleteDepartments = id => this.deleteItem(id);
                 },
 
-                reloadTable(resetPaging = false) {
+                // Reload DataTables via event
+                reloadTable() {
                     const tableComponent = this.$root.querySelector('[x-data^="datatableComponent"]');
                     const tableData = tableComponent && Alpine.$data(tableComponent);
 
@@ -124,8 +125,6 @@
                         }
 
                         tableData.table.ajax.url(url.toString());
-                        tableData.table.ajax.reload(null, resetPaging);
-                        return;
                     }
 
                     window.dispatchEvent(new CustomEvent('departments-table-reload'));
@@ -134,14 +133,14 @@
                 // Saat klik Apply di Alpine
                 applyFilters() {
                     this.statusFilter = this.tempStatus;
-                    this.reloadTable(true);
+                    this.reloadTable();
                 },
 
                 // Saat klik Reset di Alpine
                 resetFilters() {
                     this.tempStatus = '';
                     this.statusFilter = '';
-                    this.reloadTable(true);
+                    this.reloadTable();
                     this.closeDropdown();
                 },
 

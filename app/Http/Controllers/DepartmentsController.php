@@ -24,9 +24,9 @@ class DepartmentsController extends Controller
                 });
             }
 
-            if ($request->filled('status')) {
-                $query->where('is_active', $request->status);
-            }
+            $status = $request->filled('status') ? $request->status : true;
+
+            $query->where('is_active', $status);
 
             return DataTables::of($query)->make(true);
         }

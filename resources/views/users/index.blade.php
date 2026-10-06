@@ -45,8 +45,7 @@
 
                                 <div class="mb-3">
                                     <select class="form-select form-select-sm outline-royalblue" x-model="tempStatus">
-                                        <option value="">All Status</option>
-                                        <option value="1">Active Only</option>
+                                        <option value="1" selected>Active Only</option>
                                         <option value="0">Inactive Only</option>
                                     </select>
                                 </div>
@@ -107,8 +106,8 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('usersPage', () => ({
                 search: '',
-                statusFilter: '',
-                tempStatus: '',
+                statusFilter: '1',
+                tempStatus: '1',
 
                 init() {
                     this.$watch('search', () => {
@@ -119,7 +118,7 @@
                     window.deleteUsers = id => this.deleteItem(id);
                 },
 
-                reloadTable() {
+                reloadTable(resetPaging = false) {
                     const tableComponent = this.$root.querySelector('[x-data^="datatableComponent"]');
                     const tableData = tableComponent && Alpine.$data(tableComponent);
 
@@ -131,6 +130,8 @@
                         }
 
                         tableData.table.ajax.url(url.toString());
+                        tableData.table.ajax.reload(null, resetPaging);
+                        return;
                     }
 
                     window.dispatchEvent(new CustomEvent('users-table-reload'));
@@ -138,13 +139,13 @@
 
                 applyFilters() {
                     this.statusFilter = this.tempStatus;
-                    this.reloadTable();
+                    this.reloadTable(true);
                 },
 
                 resetFilters() {
-                    this.tempStatus = '';
-                    this.statusFilter = '';
-                    this.reloadTable();
+                    this.tempStatus = '1';
+                    this.statusFilter = '1';
+                    this.reloadTable(true);
                     this.closeDropdown();
                 },
 
