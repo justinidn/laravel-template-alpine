@@ -24,7 +24,8 @@ class {{ class }} extends Controller
             }
 
             // Un-comment jika menggunakan kolom is_active
-            // $query->where('is_active', ! $request->boolean('inactive'));
+               //$status = $request->filled('status') ? $request->status : true;
+               //$query->where('is_active', $status);
 
             return DataTables::of($query)->make(true);
         }
